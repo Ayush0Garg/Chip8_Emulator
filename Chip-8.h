@@ -94,11 +94,12 @@ void executeOpcode(Chip8 *Chip8);
 void userInputs(Chip8 *Chip8);
 long loadRom(char *romName, Chip8 *Chip8);
 void initiateEmulator(Chip8 *Chip8);
-void updateTimers(Chip8 *Chip8);
+void updateTimers(Chip8 *Chip8, Mix_Chunk *sound);
 
 //display
 void drawScreen(SDL_Renderer *chip8_Render, Chip8 *Chip8, configs *userConfigs);
 void initiateDisplay(SDL_Window** chip8_Window, SDL_Renderer** chip8_Renderer, configs *userConfigs);
 void clearRenders(SDL_Renderer *chip8_Renderer,Chip8 *Chip8);
 void destroyDisplay(SDL_Window* chip8_Window, SDL_Renderer* chip8_Renderer,Chip8 *Chip8);
+//void initAudio(Mix_Chunk *sound);
 #endif

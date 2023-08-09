@@ -1,8 +1,10 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL_mixer.h>
 #include "Chip-8.h"
 #include <SDL_audio.h>
+
 
 //fetch , decode and execute opcodes
 
@@ -440,6 +442,7 @@ void userInputs(Chip8 *Chip8) {
 		
 		case SDL_QUIT:			// close emulator using close button
 			Chip8->CHIP8_RUNNING = FALSE;
+			SDL_Log("EMULATER CLOSED");
 			break;
 
 		case SDL_KEYDOWN:
@@ -632,11 +635,13 @@ void initiateEmulator(Chip8 *Chip8) {
 }
 
 //update timers if timers > 0
-void updateTimers(Chip8 *Chip8){
+void updateTimers(Chip8 *Chip8, Mix_Chunk *sound){
 	if (Chip8->delayTimer != 0)
-	Chip8->delayTimer--;
-	if (Chip8->soundTimer != 0) //TODO : add beep sound
-	Chip8->soundTimer--;
+	Chip8->delayTimer--;					//decreament delay timer at 60fps/60hz rate
+	if (Chip8->soundTimer != 0){	//play sound when sound timer > 0
+		Mix_PlayChannel(-1, sound, 0);
+		Chip8->soundTimer--;				//decreament sound timer at 60fps/60hz rate
+	} 
 }
 
 //draw on screen at given coordinates
@@ -716,10 +721,22 @@ void clearRenders(SDL_Renderer *chip8_Renderer, Chip8 *Chip8){
 
 //destroy window and render & stop all sdl processes
 void destroyDisplay(SDL_Window* chip8_Window, SDL_Renderer* chip8_Renderer, Chip8 *Chip8){
-    //TODO : close audio
-    SDL_DestroyRenderer(chip8_Renderer);
+	SDL_DestroyRenderer(chip8_Renderer);
     SDL_DestroyWindow(chip8_Window);
     SDL_Quit();
 }
 
 //audio
+/*void initAudio(Mix_Chunk *sound){
+
+	if (Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 2048) != 0){
+		SDL_Log("Error in initiasing audio");
+		exit(EXIT_FAILURE);
+	}
+
+	sound = Mix_LoadWAV("beep-02.wav");
+	if (sound == NULL){
+		SDL_Log("Error in audio file loading");
+		exit(EXIT_FAILURE);
+	}
+}*/
